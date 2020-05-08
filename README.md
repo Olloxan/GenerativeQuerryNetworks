@@ -1,3 +1,5 @@
+Copyright © 2018 Jesper Wohlert
+
 **Update 2019/06/24**: A model trained on 10% of the Shepard-Metzler dataset has been added, the following notebook explains the main features of this model: [nbviewer](https://nbviewer.jupyter.org/github/wohlert/generative-query-network-pytorch/blob/master/mental-rotation.ipynb)
 
 # Generative Query Network
