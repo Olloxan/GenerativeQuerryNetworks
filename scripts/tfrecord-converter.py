@@ -15,7 +15,7 @@ from itertools import islice, chain
 from argparse import ArgumentParser
 
 # disable logging and gpu
-tf.logging.set_verbosity(tf.logging.ERROR)
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 POSE_DIM, IMG_DIM, SEQ_DIM = 5, 64, 15
@@ -34,10 +34,10 @@ def process(record):
     Processes a tf-record into a numpy (image, pose) tuple.
     """
     kwargs = dict(dtype=tf.uint8, back_prop=False)
-    for data in tf.python_io.tf_record_iterator(record):
-        instance = tf.parse_single_example(data, {
-            'frames': tf.FixedLenFeature(shape=SEQ_DIM, dtype=tf.string),
-            'cameras': tf.FixedLenFeature(shape=SEQ_DIM * POSE_DIM, dtype=tf.float32)
+    for data in tf.compat.v1.python_io.tf_record_iterator(record):
+        instance = tf.compat.v1.parse_single_example(data, {
+            'frames': tf.compat.v1.FixedLenFeature(shape=SEQ_DIM, dtype=tf.string),
+            'cameras': tf.compat.v1.FixedLenFeature(shape=SEQ_DIM * POSE_DIM, dtype=tf.float32)
         })
 
         # Get data
@@ -69,7 +69,8 @@ def convert(record, batch_size):
             torch.save(list(batch), f)
 
 if __name__ == '__main__':
-    tf.enable_eager_execution()
+    #tf.compat.v1.enable_eager_execution()
+    #tf.eagerly()
     #parser = ArgumentParser(description='Convert gqn tfrecords to gzip files.')
     #parser.add_argument('base_dir', nargs=1,
     #                    help='base directory of gqn dataset')
@@ -84,7 +85,7 @@ if __name__ == '__main__':
     # Find path
     #base_dir = os.path.expanduser(args.base_dir[0])
     #data_dir = os.path.join(base_dir, args.dataset, args.mode)
-    data_dir = "D:\\Machine Learning\\Datasets\\shepard_metzler_5_parts\\train21"
+    data_dir = "D:\\Projekte\\MachineLearning\\DataSets\\shepard_metzler_5_parts\\test"
 
     # Find all records
     records = [os.path.join(data_dir, f) for f in sorted(os.listdir(data_dir))]
@@ -92,18 +93,18 @@ if __name__ == '__main__':
 
     batch_size = 64
 
-    for record in records:
-        path, filename = os.path.split(record)
-        basename, *_ = os.path.splitext(filename)
-        print(basename)
+    #for record in records:
+    #    path, filename = os.path.split(record)
+    #    basename, *_ = os.path.splitext(filename)
+    #    print(basename)
 
-        batch_process = lambda r: chunk(process(r), batch_size)
+    #    batch_process = lambda r: chunk(process(r), batch_size)
 
-        for i, batch in enumerate(batch_process(record)):
-            p = os.path.join(path, "{0:}-{1:02}.pt.gz".format(basename, i))
-            with gzip.open(p, 'wb') as f:
-                torch.save(list(batch), f)
+    #    for i, batch in enumerate(batch_process(record)):
+    #        p = os.path.join(path, "{0:}-{1:02}.pt.gz".format(basename, i))
+    #        with gzip.open(p, 'wb') as f:
+    #            torch.save(list(batch), f)
 
-    #with mp.Pool(processes=mp.cpu_count()) as pool:
-    #    f = partial(convert, batch_size=batch_size)
-    #    pool.map(f, records)
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        f = partial(convert, batch_size=batch_size)
+        pool.map(f, records)
