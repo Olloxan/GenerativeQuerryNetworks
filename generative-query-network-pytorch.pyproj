@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{721051d7-1899-4a7f-9759-6691ac96c907}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>scripts\tfrecord-converter.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>CondaEnv|CondaEnv|TorchConda</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="draw\draw.py" />
+    <Compile Include="draw\__init__.py" />
+    <Compile Include="gqn\generator.py" />
+    <Compile Include="gqn\gqn.py" />
+    <Compile Include="gqn\representation.py" />
+    <Compile Include="gqn\training.py" />
+    <Compile Include="gqn\__init__.py" />
+    <Compile Include="placeholder.py" />
+    <Compile Include="run-convdraw.py" />
+    <Compile Include="run-draw.py" />
+    <Compile Include="run-gqn.py" />
+    <Compile Include="scripts\tfrecord-converter.py" />
+    <Compile Include="shepardmetzler.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="draw" />
+    <Folder Include="gqn" />
+    <Folder Include="scripts" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|TorchConda" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
