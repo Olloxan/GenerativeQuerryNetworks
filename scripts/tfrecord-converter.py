@@ -70,25 +70,40 @@ def convert(record, batch_size):
 
 if __name__ == '__main__':
     tf.enable_eager_execution()
-    parser = ArgumentParser(description='Convert gqn tfrecords to gzip files.')
-    parser.add_argument('base_dir', nargs=1,
-                        help='base directory of gqn dataset')
-    parser.add_argument('dataset', type=str, default="shepard_metzler_5_parts",
-                        help='datasets to convert, eg. shepard_metzler_5_parts')
-    parser.add_argument('-b', '--batch-size', type=int, default=64,
-                        help='number of sequences in each output file')
-    parser.add_argument('-m', '--mode', type=str, default='train',
-                        help='whether to convert train or test')
-    args = parser.parse_args()
+    #parser = ArgumentParser(description='Convert gqn tfrecords to gzip files.')
+    #parser.add_argument('base_dir', nargs=1,
+    #                    help='base directory of gqn dataset')
+    #parser.add_argument('dataset', type=str, default="shepard_metzler_5_parts",
+    #                    help='datasets to convert, eg. shepard_metzler_5_parts')
+    #parser.add_argument('-b', '--batch-size', type=int, default=64,
+    #                    help='number of sequences in each output file')
+    #parser.add_argument('-m', '--mode', type=str, default='train',
+    #                    help='whether to convert train or test')
+    #args = parser.parse_args()
 
     # Find path
-    base_dir = os.path.expanduser(args.base_dir[0])
-    data_dir = os.path.join(base_dir, args.dataset, args.mode)
+    #base_dir = os.path.expanduser(args.base_dir[0])
+    #data_dir = os.path.join(base_dir, args.dataset, args.mode)
+    data_dir = "D:\\Machine Learning\\Datasets\\shepard_metzler_5_parts\\train21"
 
     # Find all records
     records = [os.path.join(data_dir, f) for f in sorted(os.listdir(data_dir))]
     records = [f for f in records if "tfrecord" in f]
 
-    with mp.Pool(processes=mp.cpu_count()) as pool:
-        f = partial(convert, batch_size=args.batch_size)
-        pool.map(f, records)
+    batch_size = 64
+
+    for record in records:
+        path, filename = os.path.split(record)
+        basename, *_ = os.path.splitext(filename)
+        print(basename)
+
+        batch_process = lambda r: chunk(process(r), batch_size)
+
+        for i, batch in enumerate(batch_process(record)):
+            p = os.path.join(path, "{0:}-{1:02}.pt.gz".format(basename, i))
+            with gzip.open(p, 'wb') as f:
+                torch.save(list(batch), f)
+
+    #with mp.Pool(processes=mp.cpu_count()) as pool:
+    #    f = partial(convert, batch_size=batch_size)
+    #    pool.map(f, records)
