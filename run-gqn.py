@@ -43,7 +43,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(description='Generative Query Network on Shepard Metzler Example')
     parser.add_argument('--n_epochs', type=int, default=200, help='number of epochs run (default: 200)')
     parser.add_argument('--batch_size', type=int, default=1, help='multiple of batch size (default: 1)')
-    parser.add_argument('--data_dir', type=str, help='location of data', default="D:\\Machine Learning\\Datasets\\shepard_metzler_5_parts")
+    parser.add_argument('--data_dir', type=str, help='location of data', default="D:\\Projekte\\MachineLearning\\Datasets\\shepard_metzler_5_parts")
     parser.add_argument('--log_dir', type=str, help='location of logging', default="log")
     parser.add_argument('--fraction', type=float, help='how much of the data to use', default=1.0)
     parser.add_argument('--workers', type=int, help='number of data loading workers', default=4)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
         # Reconstruction, representation and divergence
         x_mu, _, kl = model(x, v, x_q, v_q)
-
+       
         # Log likelihood
         sigma = next(sigma_scheme)
         ll = Normal(x_mu, sigma).log_prob(x_q)
@@ -114,8 +114,9 @@ if __name__ == '__main__':
     # Model checkpointing
     checkpoint_handler = ModelCheckpoint("./", "checkpoint", save_interval=1, n_saved=3,
                                          require_empty=False)
+    
     trainer.add_event_handler(event_name=Events.EPOCH_COMPLETED, handler=checkpoint_handler,
-                              to_save={'model': model.state_dict(), 'optimizer': optimizer.state_dict(),
+                              to_save={'model': model, 'optimizer': optimizer,
                                        'annealers': (sigma_scheme.data, mu_scheme.data)})
 
     timer = Timer(average=True).attach(trainer, start=Events.EPOCH_STARTED, resume=Events.ITERATION_STARTED,
@@ -125,12 +126,13 @@ if __name__ == '__main__':
     writer = SummaryWriter(log_dir=args.log_dir)
 
     @trainer.on(Events.ITERATION_COMPLETED)
-    def log_metrics(engine):
-        for key, value in engine.state.metrics.items():
+    def log_metrics(engine):        
+        for key, value in engine.state.metrics.items():            
             writer.add_scalar("training/{}".format(key), value, engine.state.iteration)
 
     @trainer.on(Events.EPOCH_COMPLETED)
     def save_images(engine):
+        print("Epoch Completed save_images")
         with torch.no_grad():
             x, v = engine.state.batch
             x, v = x.to(device), v.to(device)
@@ -149,6 +151,7 @@ if __name__ == '__main__':
 
     @trainer.on(Events.EPOCH_COMPLETED)
     def validate(engine):
+        print("Epoch Completed validate")
         model.eval()
         with torch.no_grad():
             x, v = next(iter(valid_loader))

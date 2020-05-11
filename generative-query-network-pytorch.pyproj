@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{721051d7-1899-4a7f-9759-6691ac96c907}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>run-gqn.py</StartupFile>
+    <StartupFile>gqn_training.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -26,6 +26,11 @@
     <Compile Include="gqn\representation.py" />
     <Compile Include="gqn\training.py" />
     <Compile Include="gqn\__init__.py" />
+    <Compile Include="gqn_training.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="logger.py" />
+    <Compile Include="myTimer.py" />
     <Compile Include="placeholder.py" />
     <Compile Include="run-convdraw.py" />
     <Compile Include="run-draw.py" />
@@ -39,8 +44,8 @@
     <Folder Include="scripts" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|Tensorflow1.14" />
-    <InterpreterReference Include="CondaEnv|CondaEnv|TensorflowConda" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|Tensorflow1.4" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|TensorflowGPUConda" />
     <InterpreterReference Include="CondaEnv|CondaEnv|TorchConda" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
