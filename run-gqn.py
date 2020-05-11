@@ -93,6 +93,9 @@ if __name__ == '__main__':
         optimizer.step()
         optimizer.zero_grad()
 
+        if engine.state.iteration % 1 == 0:
+            torch.save(model.state_dict(), "model/gqn_model")
+
         with torch.no_grad():
             # Anneal learning rate
             mu = next(mu_scheme)
@@ -115,9 +118,9 @@ if __name__ == '__main__':
     checkpoint_handler = ModelCheckpoint("./", "checkpoint", save_interval=1, n_saved=3,
                                          require_empty=False)
     
-    trainer.add_event_handler(event_name=Events.EPOCH_COMPLETED, handler=checkpoint_handler,
-                              to_save={'model': model, 'optimizer': optimizer,
-                                       'annealers': (sigma_scheme.data, mu_scheme.data)})
+    #trainer.add_event_handler(event_name=Events.EPOCH_COMPLETED, handler=checkpoint_handler,
+    #                          to_save={'model': model, 'optimizer': optimizer,
+    #                                   'annealers': (sigma_scheme.data, mu_scheme.data)})
 
     timer = Timer(average=True).attach(trainer, start=Events.EPOCH_STARTED, resume=Events.ITERATION_STARTED,
                  pause=Events.ITERATION_COMPLETED, step=Events.ITERATION_COMPLETED)
