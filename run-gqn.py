@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # Create model and optimizer
     model = GenerativeQueryNetwork(x_dim=3, v_dim=7, r_dim=256, h_dim=128, z_dim=64, L=8).to(device)
     model = nn.DataParallel(model) if args.data_parallel else model
-
+    torch.save(model.state_dict(), "model/model")
     optimizer = torch.optim.Adam(model.parameters(), lr=5 * 10 ** (-5))
 
     # Rate annealing schemes
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     checkpoint_handler = ModelCheckpoint("./", "checkpoint", save_interval=1, n_saved=3,
                                          require_empty=False)
     trainer.add_event_handler(event_name=Events.EPOCH_COMPLETED, handler=checkpoint_handler,
-                              to_save={'model': model.state_dict, 'optimizer': optimizer.state_dict,
+                              to_save={'model': model.state_dict(), 'optimizer': optimizer.state_dict(),
                                        'annealers': (sigma_scheme.data, mu_scheme.data)})
 
     timer = Timer(average=True).attach(trainer, start=Events.EPOCH_STARTED, resume=Events.ITERATION_STARTED,
@@ -182,3 +182,4 @@ if __name__ == '__main__':
 
     trainer.run(train_loader, args.n_epochs)
     writer.close()
+    torch.save(model.state_dict(), "model/model")

@@ -9,7 +9,9 @@ Thanks to l3robot and versatran01 for providing initial
 scripts.
 """
 import os, gzip, torch
-import tensorflow as tf, numpy as np, multiprocessing as mp
+import tensorflow as tf
+import numpy as np
+import multiprocessing as mp
 from functools import partial
 from itertools import islice, chain
 from argparse import ArgumentParser
@@ -85,13 +87,13 @@ if __name__ == '__main__':
     # Find path
     #base_dir = os.path.expanduser(args.base_dir[0])
     #data_dir = os.path.join(base_dir, args.dataset, args.mode)
-    data_dir = "D:\\Projekte\\MachineLearning\\DataSets\\shepard_metzler_5_parts\\test"
+    data_dir = "D:\\Machine Learning\\Datasets\\shepard_metzler_5_parts\\train_orig"
 
     # Find all records
     records = [os.path.join(data_dir, f) for f in sorted(os.listdir(data_dir))]
     records = [f for f in records if "tfrecord" in f]
 
-    batch_size = 64
+    batch_size = 32
 
     #for record in records:
     #    path, filename = os.path.split(record)

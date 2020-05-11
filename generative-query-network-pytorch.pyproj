@@ -5,13 +5,13 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{721051d7-1899-4a7f-9759-6691ac96c907}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>scripts\tfrecord-converter.py</StartupFile>
+    <StartupFile>run-gqn.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <InterpreterId>CondaEnv|CondaEnv|Tensorflow1.4</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|TorchConda</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -39,7 +39,8 @@
     <Folder Include="scripts" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|Tensorflow1.4" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|Tensorflow1.14" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|TensorflowConda" />
     <InterpreterReference Include="CondaEnv|CondaEnv|TorchConda" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
