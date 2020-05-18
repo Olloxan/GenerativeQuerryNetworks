@@ -58,9 +58,12 @@ if __name__ == '__main__':
 
     
     # Create model and optimizer
-    model = GenerativeQueryNetwork(x_dim=3, v_dim=7, r_dim=256, h_dim=128, z_dim=64, L=8).to(device)
+    model = GenerativeQueryNetwork(x_dim=3, v_dim=7, r_dim=256, h_dim=128, z_dim=64, L=8).to(device)    
+    pretrained_dict = torch.load("model/gqn_model_cp_ep5_73perc", map_location='cpu')#.to(device)
+    model.load_state_dict(pretrained_dict)
     model = nn.DataParallel(model) if args.data_parallel else model
     torch.save(model.state_dict(), "model/model")
+
     optimizer = torch.optim.Adam(model.parameters(), lr=5 * 10 ** (-5))
 
     # Rate annealing schemes
