@@ -56,9 +56,9 @@ if __name__ == '__main__':
     logger = Logger()
     timer = myTimer()
     parser = ArgumentParser(description='Generative Query Network on Shepard Metzler Example')
-    parser.add_argument('--n_epochs', type=int, default=200, help='number of epochs run (default: 200)')
+    parser.add_argument('--n_epochs', type=int, default=20, help='number of epochs run (default: 200)')
     parser.add_argument('--batch_size', type=int, default=1, help='multiple of batch size (default: 1)')
-    parser.add_argument('--data_dir', type=str, help='location of data', default="D:\\Projekte\\MachineLearning\\Datasets\\shepard_metzler_5_parts")
+    parser.add_argument('--data_dir', type=str, help='location of data', default="D:\\Machine Learning\\Datasets\\shepard_metzler_5_parts")
     parser.add_argument('--log_dir', type=str, help='location of logging', default="log")
     parser.add_argument('--fraction', type=float, help='how much of the data to use', default=1.0)
     parser.add_argument('--workers', type=int, help='number of data loading workers', default=4)
@@ -89,24 +89,27 @@ if __name__ == '__main__':
     
     switch_variable = 0
     timer.update(time.time())
-    while iteration < epoch_length:
 
-        batch = next(dataloader_Iter)
-        iteration += 1
-        output = step(batch, iteration)
+    for epoch in range(args.n_epochs):        
+        while iteration < epoch_length:
+
+            batch = next(dataloader_Iter)
+            iteration += 1
+            output = step(batch, iteration)
         
-        timer.update(time.time())
-        timediff = timer.getTimeDiff()
-        total_time = timer.getTotalTime()
+            timer.update(time.time())
+            timediff = timer.getTimeDiff()
+            total_time = timer.getTotalTime()
 
-        loopstogo = (epoch_length - iteration)
-        estimatedtimetogo = timer.getTimeToGo(loopstogo)
-        logger.printDayFormat("runntime last epochs: ", timediff)
-        logger.printDayFormat("total runtime: ", total_time)
-        logger.printDayFormat("estimated time to run: ", estimatedtimetogo)          
+            loopstogo = (epoch_length - iteration)
+            estimatedtimetogo = timer.getTimeToGo(loopstogo)
+            logger.printDayFormat("runntime last epochs: ", timediff)
+            logger.printDayFormat("total runtime: ", total_time)
+            logger.printDayFormat("estimated time to run: ", estimatedtimetogo)          
 
-        logger.log_state_dict(model.state_dict(), "model/gqn_model_{0}".format(switch_variable))
-        switch_variable += 1
-        switch_variable %= 2
+            if iteration % 50 == 0:            
+                logger.log_state_dict(model.state_dict(), "model/gqn_model_{0}".format(switch_variable))
+                switch_variable += 1
+                switch_variable %= 2
 
     logger.log_state_dict(model.state_dict(), "model/gqn_model")

@@ -29,6 +29,8 @@ from gqn import GenerativeQueryNetwork, partition, Annealer
 from shepardmetzler import ShepardMetzler
 #from placeholder import PlaceholderData as ShepardMetzler
 
+from logger import Logger
+
 cuda = torch.cuda.is_available()
 device = torch.device("cuda:0" if cuda else "cpu")
 
@@ -39,21 +41,29 @@ if cuda: torch.cuda.manual_seed(99)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+logger = Logger()
+
+
+
 if __name__ == '__main__':
     parser = ArgumentParser(description='Generative Query Network on Shepard Metzler Example')
     parser.add_argument('--n_epochs', type=int, default=200, help='number of epochs run (default: 200)')
     parser.add_argument('--batch_size', type=int, default=1, help='multiple of batch size (default: 1)')
-    parser.add_argument('--data_dir', type=str, help='location of data', default="D:\\Projekte\\MachineLearning\\Datasets\\shepard_metzler_5_parts")
+    parser.add_argument('--data_dir', type=str, help='location of data', default="D:\\Machine Learning\\Datasets\\shepard_metzler_5_parts")
     parser.add_argument('--log_dir', type=str, help='location of logging', default="log")
     parser.add_argument('--fraction', type=float, help='how much of the data to use', default=1.0)
     parser.add_argument('--workers', type=int, help='number of data loading workers', default=4)
     parser.add_argument('--data_parallel', type=bool, help='whether to parallelise based on data (default: False)', default=False)
     args = parser.parse_args()
 
+    
     # Create model and optimizer
-    model = GenerativeQueryNetwork(x_dim=3, v_dim=7, r_dim=256, h_dim=128, z_dim=64, L=8).to(device)
+    model = GenerativeQueryNetwork(x_dim=3, v_dim=7, r_dim=256, h_dim=128, z_dim=64, L=8).to(device)    
+    pretrained_dict = torch.load("model/gqn_model_cp_ep5_73perc", map_location='cpu')#.to(device)
+    model.load_state_dict(pretrained_dict)
     model = nn.DataParallel(model) if args.data_parallel else model
     torch.save(model.state_dict(), "model/model")
+
     optimizer = torch.optim.Adam(model.parameters(), lr=5 * 10 ** (-5))
 
     # Rate annealing schemes
@@ -67,6 +77,8 @@ if __name__ == '__main__':
     kwargs = {'num_workers': args.workers, 'pin_memory': True} if cuda else {}
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, **kwargs)
     valid_loader = DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=True, **kwargs)
+
+    switch_variable = 0
 
     def step(engine, batch):
         model.train()
@@ -93,8 +105,15 @@ if __name__ == '__main__':
         optimizer.step()
         optimizer.zero_grad()
 
+<<<<<<< HEAD
         if engine.state.iteration % 1 == 0:
             torch.save(model.state_dict(), "model/gqn_model")
+=======
+        if engine.state.iteration % 100 == 0:
+            logger.log_state_dict(model.state_dict(), "model/gqn_model", 'iteration %s' % engine.state.iteration)
+            #switch_variable += 1
+            #switch_variable %= 2
+>>>>>>> 270fe4c4193de86ac3b1902cbca37eea64aec670
 
         with torch.no_grad():
             # Anneal learning rate
@@ -104,6 +123,9 @@ if __name__ == '__main__':
                 group["lr"] = mu * math.sqrt(1 - 0.999 ** i) / (1 - 0.9 ** i)
 
         return {"elbo": elbo.item(), "kl": kl_divergence.item(), "sigma": sigma, "mu": mu}
+
+
+    
 
     # Trainer and metrics
     trainer = Engine(step)
@@ -188,4 +210,4 @@ if __name__ == '__main__':
 
     trainer.run(train_loader, args.n_epochs)
     writer.close()
-    torch.save(model.state_dict(), "model/model")
+    logger.log_state_dict(model.state_dict(), "model/gqn_model")
