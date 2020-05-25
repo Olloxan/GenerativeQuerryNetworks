@@ -105,15 +105,11 @@ if __name__ == '__main__':
         optimizer.step()
         optimizer.zero_grad()
 
-<<<<<<< HEAD
-        if engine.state.iteration % 1 == 0:
-            torch.save(model.state_dict(), "model/gqn_model")
-=======
         if engine.state.iteration % 100 == 0:
             logger.log_state_dict(model.state_dict(), "model/gqn_model", 'iteration %s' % engine.state.iteration)
             #switch_variable += 1
             #switch_variable %= 2
->>>>>>> 270fe4c4193de86ac3b1902cbca37eea64aec670
+
 
         with torch.no_grad():
             # Anneal learning rate
