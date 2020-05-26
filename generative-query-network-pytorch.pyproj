@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{721051d7-1899-4a7f-9759-6691ac96c907}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>validator.py</StartupFile>
+    <StartupFile>DataSetViewer.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -19,6 +19,9 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DataSetViewer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="draw\draw.py" />
     <Compile Include="draw\__init__.py" />
     <Compile Include="gqn\generator.py" />

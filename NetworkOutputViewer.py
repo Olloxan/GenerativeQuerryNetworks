@@ -44,22 +44,19 @@ if __name__ == '__main__':
         x, v, x_q, v_q = partition(x, v)
 
         # Reconstruction, representation and divergence
-        x_mu, representation, kl = model(x, v, x_q, v_q)
+        prediction, ground_truth, _ = model(x, v, x_q, v_q)
 
-        representation = representation.view(-1, 1, 16, 16)
-
-        # Validate at last sigma
-        ll = Normal(x_mu, sigma_scheme.recent).log_prob(x_q)
+        ground_truth = ground_truth.view(-1, 1, 16, 16)
 
         # Send to CPU
-        x_mu = x_mu.detach().cpu().float()
-        representation = representation.detach().cpu().float()
+        prediction = prediction.detach().cpu().float()
+        ground_truth = ground_truth.detach().cpu().float()
     
         # representation
-        test = make_grid(representation).numpy().transpose((1,2,0))
+        test = make_grid(ground_truth).numpy().transpose((1,2,0))
         x = 5
         # reconstruction
-        test2 = make_grid(x_mu).numpy().transpose((1,2,0))
+        test2 = make_grid(prediction).numpy().transpose((1,2,0))
 
         plt.imshow(test2)
         plt.title('Transformed Images')
@@ -72,15 +69,5 @@ if __name__ == '__main__':
 
         plt.show()
 
-        #writer.add_image("representation", make_grid(representation), 1)
-        #writer.add_image("reconstruction", make_grid(x_mu), 2)
-        #writer.close()
-        likelihood = torch.mean(torch.sum(ll, dim=[1, 2, 3]))
-        kl_divergence = torch.mean(torch.sum(kl, dim=[1, 2, 3]))
-
-        # Evidence lower bound
-        elbo = likelihood - kl_divergence
-
-        test3 = elbo.item()
-        test4 = kl_divergence.item()
+        
     
