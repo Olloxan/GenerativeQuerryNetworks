@@ -43,7 +43,8 @@ model.load_state_dict(pretrained_dict)
 model = model.to(device)
 
 # datapath
-datapath = "D:\\Projekte\\MachineLearning\\DataSets\\shepard_metzler_7_parts"
+#datapath = "D:\\Projekte\\MachineLearning\\DataSets\\shepard_metzler_7_parts"
+datapath = "D:\\Projekte\\MachineLearning\\DataSets\\temp"
 valid_dataset = ShepardMetzler(root_dir=datapath, fraction=1.0, train=False)
 valid_loader = DataLoader(valid_dataset, batch_size=1, shuffle=True)
 

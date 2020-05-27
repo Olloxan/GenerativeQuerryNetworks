@@ -35,6 +35,9 @@
     <Compile Include="logger.py" />
     <Compile Include="myTimer.py" />
     <Compile Include="placeholder.py" />
+    <Compile Include="rooms_free_camera_no_object_rotations.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Rotation.py">
       <SubType>Code</SubType>
     </Compile>
