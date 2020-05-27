@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{721051d7-1899-4a7f-9759-6691ac96c907}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>DataSetViewer.py</StartupFile>
+    <StartupFile>Rotation.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -35,12 +35,15 @@
     <Compile Include="logger.py" />
     <Compile Include="myTimer.py" />
     <Compile Include="placeholder.py" />
+    <Compile Include="Rotation.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="run-convdraw.py" />
     <Compile Include="run-draw.py" />
     <Compile Include="run-gqn.py" />
     <Compile Include="scripts\tfrecord-converter.py" />
     <Compile Include="shepardmetzler.py" />
-    <Compile Include="validator.py">
+    <Compile Include="NetworkOutputViewer.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
