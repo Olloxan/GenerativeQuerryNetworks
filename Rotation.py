@@ -34,7 +34,7 @@ def displayImage(image1, image2, yaw):
     plt.pause(0.01)
        
 # model path
-modelName = "model-checkpoint.pth"
+modelName = "gqn_model_cp_ep51_13perc_shepardMetzler_7_parts"
 modelPath = "D:\\Projekte\\MachineLearning\\generative-query-network-pytorch\\model\\"
 modelFullPath = modelPath + modelName
 
