@@ -31,8 +31,9 @@ def displayImage(image1, image2):
     plt.pause(1.0)
        
 # model path
-modelName = "gqn_model_cp_ep47_31perc_shepardMetzler_7_parts"
-modelPath = "D:\\Projekte\\MachineLearning\\generative-query-network-pytorch\\model\\"
+modelName = "gqn_model_rooms_n_ep48_49perc"
+#modelPath = "D:\\Projekte\\MachineLearning\\generative-query-network-pytorch\\model\\"
+modelPath = "Y:\\"
 modelFullPath = modelPath + modelName
 
     
@@ -44,7 +45,8 @@ model = model.to(device)
 
 # datapath
 #datapath = "D:\\Projekte\\MachineLearning\\DataSets\\shepard_metzler_7_parts"
-datapath = "D:\\Projekte\\MachineLearning\\DataSets\\temp"
+#datapath = "D:\\Projekte\\MachineLearning\\DataSets\\temp"
+datapath = "Z:\\Datasets\\rooms_free_camera_no_object_rotations\\rooms_free_camera_no_object_rotations\\temp"
 valid_dataset = ShepardMetzler(root_dir=datapath, fraction=1.0, train=False)
 valid_loader = DataLoader(valid_dataset, batch_size=1, shuffle=True)
 

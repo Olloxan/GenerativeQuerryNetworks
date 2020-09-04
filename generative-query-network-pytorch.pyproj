@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{721051d7-1899-4a7f-9759-6691ac96c907}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>train_debugger.py</StartupFile>
+    <StartupFile>NetworkOutputViewer.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
